@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 # Uncomment the database that you have configured in config/database.yml
 # ----------------------------------------------------------------------
 # gem 'mysql2'
-# gem 'sqlite3'
+gem 'sqlite3'
 gem 'pg'
 
 # Allows easy switching between locally developed gems, and gems installed from rubygems.org
