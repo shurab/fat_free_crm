@@ -163,6 +163,22 @@ class Lead < ActiveRecord::Base
   end
   alias :name :full_name
 
+  #----------------------------------------------------------------------------
+  # rhoconnect-plugin code
+  include Rhoconnectrb::Resource
+
+  def partition
+    :app #lambda { self.user.username }
+  end
+
+  def self.rhoconnect_query(partition, attributes = nil)
+    # user = User.where(:username => partition)
+    # Lead.where(:user_id => user.first.id) if user
+    Lead.all
+  end
+
+  # ---
+
 private
 
   #----------------------------------------------------------------------------

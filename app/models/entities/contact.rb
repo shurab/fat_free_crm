@@ -185,6 +185,22 @@ class Contact < ActiveRecord::Base
     contact
   end
 
+  #----------------------------------------------------------------------------
+  # rhoconnect-plugin code
+  include Rhoconnectrb::Resource
+
+  def partition
+    :app
+    # lambda { self.user.username }
+  end
+
+  def self.rhoconnect_query(partition, attributes = nil)
+    # user = User.where(:username => partition)
+    # Contact.where(:user_id => user.first.id) if user
+    Contact.all
+  end
+  # ---
+
   private
   # Make sure at least one user has been selected if the contact is being shared.
   #----------------------------------------------------------------------------

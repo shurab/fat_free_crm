@@ -78,7 +78,7 @@ class Account < ActiveRecord::Base
   # Default values provided through class methods.
   #----------------------------------------------------------------------------
   def self.per_page ; 20 ; end
-  
+
   # Extract last line of billing address and get rid of numeric zipcode.
   #----------------------------------------------------------------------------
   def location
@@ -120,6 +120,39 @@ class Account < ActiveRecord::Base
     end
     account
   end
+
+
+  #----------------------------------------------------------------------------
+  # rhoconnect-plugin code
+  include Rhoconnectrb::Resource
+
+  def partition
+    :app
+  end
+
+  def self.rhoconnect_query(partition, attributes = nil)
+    puts "Account#rhoconnect_query: partition = #{partition}, #{partition.class}"
+    puts "Account#rhoconnect_query: attributes = #{attributes}"
+    user = User.find_by_username(partition) if partition != "app"
+
+    if attributes # paginate through Account data
+      page_size  = attributes['limit']
+      page_offset = attributes['offset']
+    end
+    page_size   ||= Account.count
+    page_offset ||= 0
+
+    if partition != "app"
+      Account.where(:user_id => user.id).limit(page_size).offset(page_offset) if user
+    else
+      if attributes
+        Account.limit(page_size).offset(page_offset)
+      else
+        Account.all
+      end
+    end
+  end
+  # ---
 
   private
   # Make sure at least one user has been selected if the account is being shared.

@@ -196,6 +196,23 @@ class Task < ActiveRecord::Base
     end
   end
 
+  #----------------------------------------------------------------------------
+  # rhoconnect-plugin code
+  include Rhoconnectrb::Resource
+
+  def partition
+    lambda { self.user.username }
+  end
+
+  def self.rhoconnect_query(partition, attributes = nil)
+    user = User.where(:username => partition)
+    # puts "**** Task.rhoconnect_query: partition = #{partition}, attributes = #{attributes}, user = #{user}"
+    # Task.where(:user_id => user.first.id) if user
+    Task.where("((user_id = :user_id AND assigned_to IS NULL) OR assigned_to = :user_id) AND (completed_at IS NULL)",
+      :user_id => user.first.id) if user
+  end
+  # ---
+
   private
   #----------------------------------------------------------------------------
   def set_due_date
@@ -232,7 +249,7 @@ class Task < ActiveRecord::Base
   rescue ArgumentError
     errors.add(:calendar, :invalid_date)
   end
-  
+
   #----------------------------------------------------------------------------
   def parse_calendar_date
     # always in 2012-10-28 06:28 format regardless of language

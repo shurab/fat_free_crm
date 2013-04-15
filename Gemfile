@@ -78,3 +78,7 @@ group :assets do
 end
 
 gem 'turbo-sprockets-rails3'
+
+# rhoconnect plugin
+gem 'rhoconnect-rb', '~> 1.0.0'
+

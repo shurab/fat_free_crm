@@ -172,6 +172,19 @@ class Opportunity < ActiveRecord::Base
     opportunity
   end
 
+  #----------------------------------------------------------------------------
+  # rhoconnect-plugin code
+  include Rhoconnectrb::Resource
+
+  def self.rhoconnect_query(partition, attributes = nil)
+    # puts "partition: #{partition}"
+    # user = User.where(:username => partition)
+    # puts "#{user.inspect}"
+    # Opportunity.where(:user_id => user.first.id) if user
+    Opportunity.all
+  end
+  # ---
+
   private
   # Make sure at least one user has been selected if the contact is being shared.
   #----------------------------------------------------------------------------

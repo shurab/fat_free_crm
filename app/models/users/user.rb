@@ -146,6 +146,19 @@ class User < ActiveRecord::Base
     super(value)
   end
 
+  #----------------------------------------------------------------------------
+  # rhoconnect-plugin code
+  include Rhoconnectrb::Resource
+
+  def partition
+    :app
+  end
+
+  def self.rhoconnect_query(partition, attributes = nil)
+    User.all
+  end
+  # ---
+
   private
 
   # Suspend newly created user if signup requires an approval.

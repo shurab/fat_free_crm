@@ -93,6 +93,22 @@ class Campaign < ActiveRecord::Base
     end
   end
 
+  #----------------------------------------------------------------------------
+  # rhoconnect-plugin code
+  include Rhoconnectrb::Resource
+
+  def partition
+    :app # lambda { self.user.username }
+  end
+
+  def self.rhoconnect_query(partition, attributes = nil)
+    #puts "partition: #{partition}"
+    # user = User.where(:username => partition)
+    # Campaign.where(:user_id => user.first.id) if user
+    Campaign.all
+  end
+  # ---
+
   private
   # Make sure end date > start date.
   #----------------------------------------------------------------------------
